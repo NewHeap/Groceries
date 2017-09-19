@@ -70,7 +70,7 @@ namespace GroceriesTool.Controllers
                 using (var dbContext = new DAL.Context.DatabaseContext())
                 {
                     var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
-                    var Grocerie = await GroceriesRepository.Find(model.Id);
+                    var Grocerie = new Groceries();
                     Grocerie.Id = model.Id;
                     Grocerie.Product = model.Product;
                     Grocerie.Stock = model.Stock;
@@ -78,7 +78,7 @@ namespace GroceriesTool.Controllers
                     Grocerie.Code = model.Code;
                     Grocerie.BuyLocation = model.BuyLocation;
                     Grocerie.StoreName = model.StoreName;
-                    await dbContext.SaveChangesAsync();
+                    GroceriesRepository.Add(Grocerie);
                     return RedirectToAction(nameof(Index));
                 }
             }

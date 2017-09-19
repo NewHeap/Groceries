@@ -57,7 +57,7 @@ namespace GroceriesTool.Controllers
         // POST: Stores/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StoreViewModel model)
+        public ActionResult Create(StoreViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -69,12 +69,12 @@ namespace GroceriesTool.Controllers
                 using (var dbContext = new DAL.Context.DatabaseContext())
                 {
                     var StoresRepository = new DAL.repository.StoresRepository(dbContext);
-                    var store = await StoresRepository.Find(model.Id);
-                    store.Openinghours = model.Openinghours;
-                    store.Closinghours = model.Closinghours;
-                    store.StoreName = model.StoreName;
-                    store.StoreLocation = model.StoreLocation;
-                    await dbContext.SaveChangesAsync();
+                    var Store = new Stores();
+                    Store.Openinghours = model.Openinghours;
+                    Store.Closinghours = model.Closinghours;
+                    Store.StoreName = model.StoreName;
+                    Store.StoreLocation = model.StoreLocation;
+                    StoresRepository.Add(Store);
                     return RedirectToAction(nameof(Index));
                 }
             }
