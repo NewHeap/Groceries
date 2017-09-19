@@ -36,7 +36,7 @@ namespace GroceriesTool.Controllers
                 var StoresRepository = new DAL.repository.StoresRepository(dbContext);
                 var store = await StoresRepository.Find(id);
                 if (store == null) return RedirectToAction(nameof(Index));
-                return View(new GroceriesTool.DAL.Models.Stores
+                return View(new StoreViewModel
                 {
                     Id = store.Id,
                     Openinghours = store.Openinghours,
@@ -142,7 +142,7 @@ namespace GroceriesTool.Controllers
                 var StoresRepository = new DAL.repository.StoresRepository(dbContext);
                 var store = await StoresRepository.Find(id);
                 if (store == null) return RedirectToAction(nameof(Index));
-                return View(new GroceriesTool.DAL.Models.Stores
+                return View(new StoreViewModel
                 {
                     Id = store.Id,
                     Openinghours = store.Openinghours,

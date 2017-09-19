@@ -36,7 +36,7 @@ namespace GroceriesTool.Controllers
                 var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
                 var Grocerie = await GroceriesRepository.Find(id);
                 if (Grocerie == null) return RedirectToAction(nameof(Index));
-                return View(new GroceriesTool.DAL.Models.Groceries
+                return View(new GrocerieViewModel
                 {
                     Id = Grocerie.Id,
                     Product = Grocerie.Product,
@@ -58,7 +58,7 @@ namespace GroceriesTool.Controllers
         // POST: Groceries/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GrocerieViewModel model)
+        public ActionResult Create(GrocerieViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -71,13 +71,6 @@ namespace GroceriesTool.Controllers
                 {
                     var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
                     var Grocerie = new Groceries();
-                    Grocerie.Id = model.Id;
-                    Grocerie.Product = model.Product;
-                    Grocerie.Stock = model.Stock;
-                    Grocerie.Price = model.Price;
-                    Grocerie.Code = model.Code;
-                    Grocerie.BuyLocation = model.BuyLocation;
-                    Grocerie.StoreName = model.StoreName;
                     GroceriesRepository.Add(Grocerie);
                     return RedirectToAction(nameof(Index));
                 }
@@ -153,7 +146,7 @@ namespace GroceriesTool.Controllers
                 var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
                 var Grocerie = await GroceriesRepository.Find(id);
                 if (Grocerie == null) return RedirectToAction(nameof(Index));
-                return View(new GroceriesTool.DAL.Models.Groceries
+                return View(new GrocerieViewModel
                 {
                     Id = Grocerie.Id,
                     Product = Grocerie.Product,
