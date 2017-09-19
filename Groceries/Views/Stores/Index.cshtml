@@ -1,0 +1,39 @@
+﻿@using GroceriesTool.DAL.Models
+@model List<Stores>
+@{
+    ViewData["Title"] = "Stores";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+<p>@Html.ActionLink("Create new Product", "Create")</p>
+
+<table  class="table table-striped">
+    <thead>
+        <tr>
+            <td>StoreName ID</td>
+            <td>OpeningHours</td>
+            <td>ClosingHours</td>
+            <td>StoreName</td>
+            <td>StoreLocation</td>
+            <td></td>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    { 
+       
+        <tr>
+            @*<td>@Html.DisplayFor(modelItem => item.Id)</td>*@
+            <td>@item.Id</td>
+            <td>@item.Openinghours</td>
+            <td>@item.Closinghours</td>
+            <td>@item.StoreName</td>
+            <td>@item.StoreLocation</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+
+    }
+</table>
