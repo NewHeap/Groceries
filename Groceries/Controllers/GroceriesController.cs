@@ -180,5 +180,21 @@ namespace GroceriesTool.Controllers
                 return View(model);
             }
         }
+
+        //// GET: Groceries/Stock
+        //[HttpGet]
+        //public async Task<IActionResult> Stock(int id)
+        //{
+            
+        //}
+
+
+        //// POST: Groceries/Stock
+        //[HttpPost]
+        //public async Task<IActionResult> Stock(GrocerieViewModel model)
+        //{
+
+        //}
+
     }
 }
