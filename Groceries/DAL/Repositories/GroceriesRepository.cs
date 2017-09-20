@@ -1,12 +1,10 @@
 ﻿using GroceriesTool.DAL.Context;
 using GroceriesTool.DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace GroceriesTool.DAL.repository
+namespace GroceriesTool.DAL.Repositories
 {
     public class GroceriesRepository : IRepository<Groceries>
     {
@@ -25,7 +23,7 @@ namespace GroceriesTool.DAL.repository
         public async Task<Groceries> Find(int key)
         {
             return await _context.Groceries.FirstOrDefaultAsync(t => t.Id == key);
-        }   
+        }
 
         public async Task<IEnumerable<Groceries>> GetAll()
         {

@@ -1,20 +1,15 @@
 ﻿using GroceriesTool.DAL.Context;
 using GroceriesTool.DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace GroceriesTool.DAL.repository
+namespace GroceriesTool.DAL.Repositories
 {
     public class StoresRepository : IRepository<Stores>
     {
         private readonly DatabaseContext _context;
-        //public Index(DatabaseContext context)
-        //{
-        //    _context = context;
-        //}
+
         public StoresRepository(DatabaseContext context)
         {
             _context = context;

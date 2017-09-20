@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GroceriesTool.DAL.Context;
-using GroceriesTool.DAL.repository;
+using GroceriesTool.DAL.Repositories;
 using GroceriesTool.DAL.Models;
 
 namespace GroceriesTool

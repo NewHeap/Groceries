@@ -27,7 +27,7 @@ namespace GroceriesTool.Controllers
 
             using (var dbContext = new DAL.Context.DatabaseContext())
             {
-                var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
 
                 viewModel = (await GroceriesRepository.GetAll()).ToList();
                 ViewData["Message"] = "All the storage is on this page (well it needs to be).";
@@ -41,7 +41,7 @@ namespace GroceriesTool.Controllers
 
             using (var dbContext = new DAL.Context.DatabaseContext())
             {
-                var storeRepository = new DAL.repository.StoresRepository(dbContext);
+                var storeRepository = new DAL.Repositories.StoresRepository(dbContext);
 
                 viewModel = (await storeRepository.GetAll()).ToList();
                 ViewData["Message"] = "Place all the stores in this tabel";

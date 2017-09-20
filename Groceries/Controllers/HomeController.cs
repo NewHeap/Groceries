@@ -1,17 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GroceriesTool.DAL.Models;
+using GroceriesTool.DAL.Repositories;
+using GroceriesTool.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using GroceriesTool.Models;
 
 namespace GroceriesTool.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
+        public IRepository<Groceries> GroceriesRepository { get; }
+        public IRepository<Stores> StoresRepository { get; }
+
+        public HomeController(IRepository<Groceries> groceriesRepository, IRepository<Stores> storesRepository)
+        {
+            GroceriesRepository = GroceriesRepository;
+            StoresRepository = storesRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -23,29 +32,31 @@ namespace GroceriesTool.Controllers
         public async Task<IActionResult> Groceries()
         {
 
-            var viewModel = new List<DAL.Models.Groceries>();
-
-            using (var dbContext = new DAL.Context.DatabaseContext())
+            var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
             {
-                var GroceriesRepository = new DAL.repository.GroceriesRepository(dbContext);
-
-                viewModel = (await GroceriesRepository.GetAll()).ToList();
-                ViewData["Message"] = "All the storage is on this page (well it needs to be).";
-            }
+                Id = x.Id,
+                StoreName = x.StoreName,
+                BuyLocation = x.BuyLocation,
+                Code = x.Code,
+                Price = x.Price,
+                Product = x.Product,
+                Stock = x.Stock
+            });
+            ViewData["Message"] = "All the storage is on this page (well it needs to be).";
             return View(viewModel);
         }
 
         public async Task<IActionResult> Stores()
         {
-            var viewModel = new List<DAL.Models.Stores>();
-
-            using (var dbContext = new DAL.Context.DatabaseContext())
+            var viewModel = (await StoresRepository.GetAll()).Select(x => new StoreViewModel
             {
-                var storeRepository = new DAL.repository.StoresRepository(dbContext);
-
-                viewModel = (await storeRepository.GetAll()).ToList();
-                ViewData["Message"] = "Place all the stores in this tabel";
-            }
+                Id = x.Id,
+                Closinghours = x.Closinghours,
+                Openinghours = x.Openinghours,
+                StoreLocation = x.StoreLocation,
+                StoreName = x.StoreName
+            });
+            ViewData["Message"] = "Place all the stores in this tabel";
             return View(viewModel);
         }
 
