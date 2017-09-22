@@ -1,13 +1,15 @@
-﻿@model GrocerieViewModel
+﻿@using GroceriesTool.DAL.Models
 @model List<Groceries>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Stock</title>
-</head>
-<body>
-
+@{ 
+    ViewBag.Title = "Stocks";
+}
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
 <h4>Stock</h4>
 <hr />
 <div class="row">
@@ -19,19 +21,18 @@
                     <td>Product</td>
                     <td>Stock</td>
                 </tr>
-            </thead>
+            </thead> 
             @foreach (var item in Model)
-    {
+            {
+            
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Product</td>
-                    <td>@item.Stock</td>
+                    <td><input class="stockValue" type="number" value="@item.Stock" style="width:30px;" /></td>
+                    <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button> </td>
                 </tr>
-    }
+            }
         </table>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-default" />
-       </div>
     </div>
 </div>
 
@@ -39,7 +40,41 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-</body>
-</html>
+@section scripts {
+<script type="text/javascript">
+    $(document).ready(function () {
+            $(".buttonUp").on("click", function () {
 
+                $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
+                    return ++oldval;
+                });
+            
 
+            });
+            $(".buttonDown").on("click", function () {
+                $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
+                    return --oldval;
+                });
+
+            });
+            $('#counter').val(function (i, oldval) {
+                return ++oldval;
+            });
+    });
+
+    $("#currentName").change(function () {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("get")",//your url here
+            data: $(this).val(),  //this is the current value that was changed
+            success: function (response) {
+                console.log("success");
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    });
+
+</script>
+}

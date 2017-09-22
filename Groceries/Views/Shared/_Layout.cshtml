@@ -17,7 +17,7 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -31,7 +31,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Groceries" asp-action="Index">Groceries</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Groceries
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-area="" asp-controller="Groceries" asp-action="Index">Home page</a></li>
+                            <li><a asp-area="" asp-controller="Groceries" asp-action="Create">Create</a></li>
+                            <li><a asp-area="" asp-controller="Groceries" asp-action="Stock">Stock</a></li>
+                        </ul>
+                    </li>
                     <li><a asp-area="" asp-controller="Stores" asp-action="Index">Stores</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")

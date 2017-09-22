@@ -181,20 +181,47 @@ namespace GroceriesTool.Controllers
             }
         }
 
-        //// GET: Groceries/Stock
-        //[HttpGet]
-        //public async Task<IActionResult> Stock(int id)
-        //{
-            
-        //}
+        // GET: Groceries/Stock
+        [HttpGet]
+        public async Task<IActionResult> Stock(int id)
+        {
+            var viewModel = new List<DAL.Models.Groceries>();
+
+            using (var dbContext = new DAL.Context.DatabaseContext())
+            {
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+
+                viewModel = (await GroceriesRepository.GetAll()).ToList();
+            }
+            return View(viewModel);
+        }
 
 
-        //// POST: Groceries/Stock
-        //[HttpPost]
-        //public async Task<IActionResult> Stock(GrocerieViewModel model)
-        //{
-
-        //}
+        // POST: Groceries/Stock
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Stock(GrocerieViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Please check fields for errer");
+                return View(model);
+            }
+            try
+            {
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var Grocerie = new Groceries();
+                    await dbContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
     }
 }
