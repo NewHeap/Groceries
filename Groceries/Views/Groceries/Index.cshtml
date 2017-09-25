@@ -5,8 +5,8 @@
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
-<p>@Html.ActionLink("Create new Product", "Create")</p>
-<p>@Html.ActionLink("Get all the stock", "Stock")</p>
+@Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
+@Html.ActionLink("Get all the stock", "Stock", null, null, new { @class = "btn btn-default" })
 <table class="table table-striped">
     <thead>
         <tr>
@@ -30,10 +30,11 @@
             <td>@item.Stock</td>
             <td>@item.BuyLocation</td>
             <td>@item.StoreName</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+
+            <td class="btn-group">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
             </td>
         </tr>
     }

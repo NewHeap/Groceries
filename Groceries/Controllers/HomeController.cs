@@ -31,7 +31,6 @@ namespace GroceriesTool.Controllers
         }
         public async Task<IActionResult> Groceries()
         {
-
             var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
             {
                 Id = x.Id,

@@ -7,12 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using GroceriesTool.Models;
 using GroceriesTool.DAL.Models;
+using GroceriesTool.DAL.Repositories;
 
 namespace GroceriesTool.Controllers
 {
     [Authorize]
     public class GroceriesController : Controller
     {
+        public IRepository<Groceries> GroceriesRepository { get; }
+        public GroceriesController(IRepository<Groceries> groceriesRepository)
+        {
+            GroceriesRepository = GroceriesRepository;
+        }
         // GET: Groceries
         public async Task<IActionResult> Index()
         {
@@ -34,18 +40,18 @@ namespace GroceriesTool.Controllers
             using (var dbContext = new DAL.Context.DatabaseContext())
             {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var Grocerie = await GroceriesRepository.Find(id);
-                if (Grocerie == null) return RedirectToAction(nameof(Index));
-                return View(new GrocerieViewModel
+                var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
                 {
-                    Id = Grocerie.Id,
-                    Product = Grocerie.Product,
-                    Stock = Grocerie.Stock,
-                    Price = Grocerie.Price,
-                    Code = Grocerie.Code,
-                    BuyLocation = Grocerie.BuyLocation,
-                    StoreName = Grocerie.StoreName
+                    Id = x.Id,
+                    StoreName = x.StoreName,
+                    BuyLocation = x.BuyLocation,
+                    Code = x.Code,
+                    Price = x.Price,
+                    Product = x.Product,
+                    Stock = x.Stock
                 });
+                if (viewModel == null) return RedirectToAction(nameof(Index));
+                return View(viewModel);
             }
         }
 
@@ -214,7 +220,8 @@ namespace GroceriesTool.Controllers
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var Grocerie = new Groceries();
                     await dbContext.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return Ok();
+                    //return RedirectToAction(nameof(Index));
                 }
             }
             catch
@@ -223,5 +230,25 @@ namespace GroceriesTool.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStock(int id, int stock)
+        {
+            try
+            {
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var grocerie = await GroceriesRepository.Find(id);
+                    grocerie.Stock = stock.ToString();
+                    await dbContext.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

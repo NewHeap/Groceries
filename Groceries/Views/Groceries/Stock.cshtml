@@ -48,8 +48,8 @@
                 $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
                     return ++oldval;
                 });
-            
 
+                saveChanges();
             });
             $(".buttonDown").on("click", function () {
                 $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
@@ -60,21 +60,21 @@
             $('#counter').val(function (i, oldval) {
                 return ++oldval;
             });
-    });
 
-    $("#currentName").change(function () {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("get")",//your url here
-            data: $(this).val(),  //this is the current value that was changed
-            success: function (response) {
-                console.log("success");
-            },
-            error: function (response) {
-                console.log(response);
+            var saveChanges = function (body) {
+                $.ajax({
+                        body: body,
+                        type: "POST",
+                        url: '@Url.Action("Stock")',
+                        success: function () {
+                           alert("Data has been added successfully.");
+                            LoadData();
+                        },
+                        error: function () {
+                            alert("Error while inserting data");
+                        }
+                    });
             }
-        });
     });
-
 </script>
 }
