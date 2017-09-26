@@ -12,10 +12,10 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public Repository<Groceries> GroceriesRepository { get; }
-        public Repository<Stores> StoresRepository { get; }
+        public IRepository<Groceries> GroceriesRepository { get; }
+        public IRepository<Stores> StoresRepository { get; }
 
-        public HomeController(Repository<Groceries> groceriesRepository, Repository<Stores> storesRepository)
+        public HomeController(IRepository<Groceries> groceriesRepository, IRepository<Stores> storesRepository)
         {
             GroceriesRepository = GroceriesRepository;
             StoresRepository = storesRepository;

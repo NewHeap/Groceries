@@ -14,9 +14,9 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class GroceriesController : Controller
     {
-        public Repository<Groceries> GroceriesRepository { get; }
+        public IRepository<Groceries> GroceriesRepository { get; }
 
-        public GroceriesController(Repository<Groceries> groceriesRepository)
+        public GroceriesController(IRepository<Groceries> groceriesRepository)
         {
             GroceriesRepository = GroceriesRepository;
         }
@@ -26,30 +26,35 @@ namespace GroceriesTool.Controllers
         {
             var viewModel = new List<DAL.Models.Groceries>();
 
-
+            using (var dbContext = new DAL.Context.DatabaseContext())
+            {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
 
                 viewModel = (await GroceriesRepository.GetAll()).ToList();
                 ViewData["Message"] = "All the storage is on this page (well it needs to be).";
+            }
             return View(viewModel);
         }
 
         // GET: Groceries/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-            var Grocerie = await GroceriesRepository.Find(id);
-            if (Grocerie == null) return RedirectToAction(nameof(Index));
-            return View(new GrocerieViewModel
+            using (var dbContext = new DAL.Context.DatabaseContext())
             {
-                Id = Grocerie.Id,
-                Product = Grocerie.Product,
-                Stock = Grocerie.Stock,
-                Price = Grocerie.Price,
-                Code = Grocerie.Code,
-                BuyLocation = Grocerie.BuyLocation,
-                StoreName = Grocerie.StoreName
-            });
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                var Grocerie = await GroceriesRepository.Find(id);
+                if (Grocerie == null) return RedirectToAction(nameof(Index));
+                return View(new GrocerieViewModel
+                {
+                    Id = Grocerie.Id,
+                    Product = Grocerie.Product,
+                    Stock = Grocerie.Stock,
+                    Price = Grocerie.Price,
+                    Code = Grocerie.Code,
+                    BuyLocation = Grocerie.BuyLocation,
+                    StoreName = Grocerie.StoreName
+                });
+            }
         }
 
         // GET: Groceries/Create
@@ -70,10 +75,13 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var Grocerie = new Groceries();
-                GroceriesRepository.Add(Grocerie);
-                return RedirectToAction(nameof(Index));
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var Grocerie = new Groceries();
+                    GroceriesRepository.Add(Grocerie);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {
@@ -85,19 +93,22 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-            var Grocerie = await GroceriesRepository.Find(id);
-            if (Grocerie == null) return RedirectToAction(nameof(Index));
-            return View(new GrocerieViewModel
-            { 
-                Id = Grocerie.Id,
-                Product = Grocerie.Product,
-                Stock = Grocerie.Stock,
-                Price = Grocerie.Price,
-                Code = Grocerie.Code,
-                BuyLocation = Grocerie.BuyLocation,
-                StoreName = Grocerie.StoreName
-            });
+            using (var dbContext = new DAL.Context.DatabaseContext())
+            {
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                var Grocerie = await GroceriesRepository.Find(id);
+                if (Grocerie == null) return RedirectToAction(nameof(Index));
+                return View(new GrocerieViewModel
+                { 
+                    Id = Grocerie.Id,
+                    Product = Grocerie.Product,
+                    Stock = Grocerie.Stock,
+                    Price = Grocerie.Price,
+                    Code = Grocerie.Code,
+                    BuyLocation = Grocerie.BuyLocation,
+                    StoreName = Grocerie.StoreName
+                });
+            }
         }
 
 
@@ -112,17 +123,20 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var Grocerie = await GroceriesRepository.Find(model.Id);
-                Grocerie.Id = model.Id;
-                Grocerie.Product = model.Product;
-                Grocerie.Stock = model.Stock;
-                Grocerie.Price = model.Price; 
-                Grocerie.Code = model.Code;
-                Grocerie.BuyLocation = model.BuyLocation;
-                Grocerie.StoreName = model.StoreName;
-                await dbContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var Grocerie = await GroceriesRepository.Find(model.Id);
+                    Grocerie.Id = model.Id;
+                    Grocerie.Product = model.Product;
+                    Grocerie.Stock = model.Stock;
+                    Grocerie.Price = model.Price; 
+                    Grocerie.Code = model.Code;
+                    Grocerie.BuyLocation = model.BuyLocation;
+                    Grocerie.StoreName = model.StoreName;
+                    await dbContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {
@@ -134,20 +148,23 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-            var Grocerie = await GroceriesRepository.Find(id);
-            if (Grocerie == null) return RedirectToAction(nameof(Index));
-            return View(new GrocerieViewModel
+            using (var dbContext = new DAL.Context.DatabaseContext())
             {
-                Id = Grocerie.Id,
-                Product = Grocerie.Product,
-                Stock = Grocerie.Stock,
-                Price = Grocerie.Price,
-                Code = Grocerie.Code,
-                BuyLocation = Grocerie.BuyLocation,
-                StoreName = Grocerie.StoreName
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                var Grocerie = await GroceriesRepository.Find(id);
+                if (Grocerie == null) return RedirectToAction(nameof(Index));
+                return View(new GrocerieViewModel
+                {
+                    Id = Grocerie.Id,
+                    Product = Grocerie.Product,
+                    Stock = Grocerie.Stock,
+                    Price = Grocerie.Price,
+                    Code = Grocerie.Code,
+                    BuyLocation = Grocerie.BuyLocation,
+                    StoreName = Grocerie.StoreName
 
-            });
+                });
+            }
         }
 
         // POST: Groceries/Delete/5
@@ -156,11 +173,14 @@ namespace GroceriesTool.Controllers
         {
             try
             {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var i = await GroceriesRepository.Find(model.Id);
-                dbContext.Remove(i);
-                await dbContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var i = await GroceriesRepository.Find(model.Id);
+                    dbContext.Remove(i);
+                    await dbContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch
             {
@@ -174,9 +194,12 @@ namespace GroceriesTool.Controllers
         {
             var viewModel = new List<DAL.Models.Groceries>();
 
-            var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+            using (var dbContext = new DAL.Context.DatabaseContext())
+            {
+                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
 
-              viewModel = (await GroceriesRepository.GetAll()).ToList();
+                viewModel = (await GroceriesRepository.GetAll()).ToList();
+            }
             return View(viewModel);
         }
 
@@ -191,6 +214,8 @@ namespace GroceriesTool.Controllers
                 ModelState.AddModelError("", "Please check fields for errer");
                 return View(model);
             }
+            try
+            {
                 using (var dbContext = new DAL.Context.DatabaseContext())
                 {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
@@ -212,11 +237,14 @@ namespace GroceriesTool.Controllers
         {
             try
             {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var grocerie = await GroceriesRepository.Find(id);
-                grocerie.Stock = stock.ToString();
-                await dbContext.SaveChangesAsync();
-                return Ok();
+                using (var dbContext = new DAL.Context.DatabaseContext())
+                {
+                    var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
+                    var grocerie = await GroceriesRepository.Find(id);
+                    grocerie.Stock = stock.ToString();
+                    await dbContext.SaveChangesAsync();
+                    return Ok();
+                }
             }
             catch
             {

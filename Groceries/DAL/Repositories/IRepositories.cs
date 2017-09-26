@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace GroceriesTool.DAL.Repositories
 {
-    public interface IRepositories<T> where T : class, IDb
+    public interface IRepository<T> where T : class, IDb
     {
         void Add(T item);
         Task<IEnumerable<T>> GetAll();
