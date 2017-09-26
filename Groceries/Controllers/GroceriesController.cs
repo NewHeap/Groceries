@@ -14,17 +14,13 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class GroceriesController : Controller
     {
-<<<<<<< HEAD
         public Repository<Groceries> GroceriesRepository { get; }
 
         public GroceriesController(Repository<Groceries> groceriesRepository)
-=======
-        public IRepository<Groceries> GroceriesRepository { get; }
-        public GroceriesController(IRepository<Groceries> groceriesRepository)
->>>>>>> parent of 761c858... Print butten
         {
             GroceriesRepository = GroceriesRepository;
         }
+
         // GET: Groceries
         public async Task<IActionResult> Index()
         {
@@ -41,7 +37,6 @@ namespace GroceriesTool.Controllers
         // GET: Groceries/Details/5
         public async Task<IActionResult> Details(int id)
         {
-<<<<<<< HEAD
             var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
             var Grocerie = await GroceriesRepository.Find(id);
             if (Grocerie == null) return RedirectToAction(nameof(Index));
@@ -55,24 +50,6 @@ namespace GroceriesTool.Controllers
                 BuyLocation = Grocerie.BuyLocation,
                 StoreName = Grocerie.StoreName
             });
-=======
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
-                {
-                    Id = x.Id,
-                    StoreName = x.StoreName,
-                    BuyLocation = x.BuyLocation,
-                    Code = x.Code,
-                    Price = x.Price,
-                    Product = x.Product,
-                    Stock = x.Stock
-                });
-                if (viewModel == null) return RedirectToAction(nameof(Index));
-                return View(viewModel);
-            }
->>>>>>> parent of 761c858... Print butten
         }
 
         // GET: Groceries/Create
@@ -108,7 +85,6 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-<<<<<<< HEAD
             var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
             var Grocerie = await GroceriesRepository.Find(id);
             if (Grocerie == null) return RedirectToAction(nameof(Index));
@@ -122,25 +98,6 @@ namespace GroceriesTool.Controllers
                 BuyLocation = Grocerie.BuyLocation,
                 StoreName = Grocerie.StoreName
             });
-=======
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
-                var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var Grocerie = await GroceriesRepository.Find(id);
-                if (Grocerie == null) return RedirectToAction(nameof(Index));
-                return View(new GrocerieViewModel
-                { 
-                    Id = Grocerie.Id,
-                    Product = Grocerie.Product,
-                    Stock = Grocerie.Stock,
-                    Price = Grocerie.Price,
-                    Code = Grocerie.Code,
-                    BuyLocation = Grocerie.BuyLocation,
-                    StoreName = Grocerie.StoreName
-                });
-                throw new Exception();
-            }
->>>>>>> parent of 761c858... Print butten
         }
 
 
