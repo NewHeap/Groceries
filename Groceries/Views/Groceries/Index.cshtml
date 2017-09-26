@@ -7,30 +7,29 @@
 <h3>@ViewData["Message"]</h3>
 @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
 @Html.ActionLink("Get all the stock", "Stock", null, null, new { @class = "btn btn-default" })
-<a class = "btn btn-default "  href="#" onclick="window.print();return false;"><span class="glyphicon glyphicon-print"></span> Print</a> 
 <table class="table table-striped">
     <thead>
         <tr>
-            <td class="print">Id</td>
-            <td class="print">Product</td>
-            <td class="print">Code</td>
-            <td class="print">Price</td>
-            <td class="print">Stock</td>
-            <td class="print">BuyLocation</td>
-            <td class="print">StoreName</td>
-            <td class="print"></td>
+            <td>Id</td>
+            <td>Product</td>
+            <td>Code</td>
+            <td>Price</td>
+            <td>Stock</td>
+            <td>BuyLocation</td>
+            <td>StoreName</td>
+            <td></td>
         </tr>
     </thead>
     @foreach (var item in Model)
     {
         <tr>
-            <td class="print">@item.Id</td>
-            <td class="print">@item.Product</td>
-            <td class="print">@item.Code</td>
-            <td class="print">@item.Price</td>
-            <td class="print">@item.Stock</td>
-            <td class="print">@item.BuyLocation</td>
-            <td class="print">@item.StoreName</td>
+            <td>@item.Id</td>
+            <td>@item.Product</td>
+            <td>@item.Code</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>@item.BuyLocation</td>
+            <td>@item.StoreName</td>
 
             <td class="btn-group">
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
