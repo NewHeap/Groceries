@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroceriesTool.DAL.Repositories
 {
-    public class GroceriesRepository : IRepository<Groceries>
+    public class GroceriesRepository : Repository<Groceries>
     {
         private readonly DatabaseContext _context;
 

@@ -2,5 +2,5 @@
     visibility: hidden;
 }
 .print {
-    visibility: visible;
+    display: none
 }

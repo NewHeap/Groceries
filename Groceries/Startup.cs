@@ -39,8 +39,8 @@ namespace GroceriesTool
             services.AddDbContext<DatabaseContext>();
 
             services.AddMvc();
-            services.AddSingleton<IRepository<Groceries>>(new GroceriesRepository(new DatabaseContext()));
-            services.AddSingleton<IRepository<Stores>>(new StoresRepository(new DatabaseContext()));
+            services.AddSingleton<Repository<Groceries>>(new GroceriesRepository(new DatabaseContext()));
+            services.AddSingleton<Repository<Stores>>(new StoresRepository(new DatabaseContext()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
