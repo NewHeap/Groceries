@@ -39,8 +39,6 @@ namespace GroceriesTool.Controllers
         // GET: Groceries/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                 var Grocerie = await GroceriesRepository.Find(id);
                 if (Grocerie == null) return RedirectToAction(nameof(Index));
@@ -54,7 +52,6 @@ namespace GroceriesTool.Controllers
                     BuyLocation = Grocerie.BuyLocation,
                     StoreName = Grocerie.StoreName
                 });
-            }
         }
 
         // GET: Groceries/Create
@@ -75,13 +72,11 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var Grocerie = new Groceries();
                     GroceriesRepository.Add(Grocerie);
                     return RedirectToAction(nameof(Index));
-                }
+                
             }
             catch
             {
@@ -93,8 +88,6 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                 var Grocerie = await GroceriesRepository.Find(id);
                 if (Grocerie == null) return RedirectToAction(nameof(Index));
@@ -108,7 +101,6 @@ namespace GroceriesTool.Controllers
                     BuyLocation = Grocerie.BuyLocation,
                     StoreName = Grocerie.StoreName
                 });
-            }
         }
 
 
@@ -123,8 +115,6 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var Grocerie = await GroceriesRepository.Find(model.Id);
                     Grocerie.Id = model.Id;
@@ -136,7 +126,6 @@ namespace GroceriesTool.Controllers
                     Grocerie.StoreName = model.StoreName;
                     await dbContext.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }
             }
             catch
             {
@@ -148,8 +137,6 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                 var Grocerie = await GroceriesRepository.Find(id);
                 if (Grocerie == null) return RedirectToAction(nameof(Index));
@@ -164,7 +151,6 @@ namespace GroceriesTool.Controllers
                     StoreName = Grocerie.StoreName
 
                 });
-            }
         }
 
         // POST: Groceries/Delete/5
@@ -173,14 +159,11 @@ namespace GroceriesTool.Controllers
         {
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var i = await GroceriesRepository.Find(model.Id);
                     dbContext.Remove(i);
                     await dbContext.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }
             }
             catch
             {
@@ -194,12 +177,9 @@ namespace GroceriesTool.Controllers
         {
             var viewModel = new List<DAL.Models.Groceries>();
 
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
 
                 viewModel = (await GroceriesRepository.GetAll()).ToList();
-            }
             return View(viewModel);
         }
 
@@ -216,14 +196,11 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var Grocerie = new Groceries();
                     await dbContext.SaveChangesAsync();
                     return Ok();
                     //return RedirectToAction(nameof(Index));
-                }
             }
             catch
             {
@@ -237,14 +214,11 @@ namespace GroceriesTool.Controllers
         {
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
                     var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
                     var grocerie = await GroceriesRepository.Find(id);
                     grocerie.Stock = stock.ToString();
                     await dbContext.SaveChangesAsync();
                     return Ok();
-                }
             }
             catch
             {
