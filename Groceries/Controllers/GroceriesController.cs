@@ -15,10 +15,12 @@ namespace GroceriesTool.Controllers
     public class GroceriesController : Controller
     {
         public IRepository<Groceries> GroceriesRepository { get; }
+
         public GroceriesController(IRepository<Groceries> groceriesRepository)
         {
             GroceriesRepository = GroceriesRepository;
         }
+
         // GET: Groceries
         public async Task<IActionResult> Index()
         {
@@ -40,18 +42,18 @@ namespace GroceriesTool.Controllers
             using (var dbContext = new DAL.Context.DatabaseContext())
             {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
-                var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
+                var Grocerie = await GroceriesRepository.Find(id);
+                if (Grocerie == null) return RedirectToAction(nameof(Index));
+                return View(new GrocerieViewModel
                 {
-                    Id = x.Id,
-                    StoreName = x.StoreName,
-                    BuyLocation = x.BuyLocation,
-                    Code = x.Code,
-                    Price = x.Price,
-                    Product = x.Product,
-                    Stock = x.Stock
+                    Id = Grocerie.Id,
+                    Product = Grocerie.Product,
+                    Stock = Grocerie.Stock,
+                    Price = Grocerie.Price,
+                    Code = Grocerie.Code,
+                    BuyLocation = Grocerie.BuyLocation,
+                    StoreName = Grocerie.StoreName
                 });
-                if (viewModel == null) return RedirectToAction(nameof(Index));
-                return View(viewModel);
             }
         }
 
@@ -106,7 +108,6 @@ namespace GroceriesTool.Controllers
                     BuyLocation = Grocerie.BuyLocation,
                     StoreName = Grocerie.StoreName
                 });
-                throw new Exception();
             }
         }
 
