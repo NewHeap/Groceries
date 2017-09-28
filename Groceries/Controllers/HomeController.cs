@@ -12,10 +12,10 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public IRepository<Groceries> GroceriesRepository { get; }
+        public IRepository<DAL.Models.Groceries> GroceriesRepository { get; }
         public IRepository<Stores> StoresRepository { get; }
 
-        public HomeController(IRepository<Groceries> groceriesRepository, IRepository<Stores> storesRepository)
+        public HomeController(IRepository<DAL.Models.Groceries> groceriesRepository, IRepository<Stores> storesRepository)
         {
             GroceriesRepository = GroceriesRepository;
             StoresRepository = storesRepository;
@@ -31,7 +31,7 @@ namespace GroceriesTool.Controllers
         }
         public async Task<IActionResult> Groceries()
         {
-            var viewModel = (await GroceriesRepository.GetAll()).Select(x => new GrocerieViewModel
+            var viewModel = (await GroceriesRepository.GetAllAsync()).Select(x => new GrocerieViewModel
             {
                 Id = x.Id,
                 StoreName = x.StoreName,
@@ -47,7 +47,7 @@ namespace GroceriesTool.Controllers
 
         public async Task<IActionResult> Stores()
         {
-            var viewModel = (await StoresRepository.GetAll()).Select(x => new StoreViewModel
+            var viewModel = (await StoresRepository.GetAllAsync()).Select(x => new StoreViewModel
             {
                 Id = x.Id,
                 Closinghours = x.Closinghours,

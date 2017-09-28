@@ -39,7 +39,7 @@ namespace GroceriesTool
             services.AddDbContext<DatabaseContext>();
 
             services.AddMvc();
-            services.AddSingleton<IRepository<Groceries>>(new GroceriesRepository(new DatabaseContext()));
+            services.AddSingleton<IRepository<DAL.Models.Groceries>>(new GroceriesRepository(new DatabaseContext()));
             services.AddSingleton<IRepository<Stores>>(new StoresRepository(new DatabaseContext()));
         }
 

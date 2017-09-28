@@ -7,34 +7,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using GroceriesTool.Models;
 using GroceriesTool.DAL.Models;
+using GroceriesTool.DAL.Repositories;
 
 namespace GroceriesTool.Controllers
 {
     [Authorize]
     public class StoresController : Controller
     {
+        private IRepository<DAL.Models.Stores> StoresRepository { get; set; }
+
+        public StoresController(IRepository<DAL.Models.Stores> storesRepository)
+        {
+            StoresRepository = StoresRepository;
+        }
+
         // GET: Stores
         public async Task<ActionResult> Index()
         {
-            var viewModel = new List<DAL.Models.Stores>();
-
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
-                var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-
-                viewModel = (await StoresRepository.GetAll()).ToList();
-                ViewData["Message"] = "All the storage is on this page (well it needs to be).";
-            }
+            var viewModel = (await StoresRepository.GetAllAsync()).Select(x => new StoreViewModel { Id = x.Id, Openinghours = x.Openinghours, Closinghours = x.Closinghours, StoreName = x.StoreName, StoreLocation = x.StoreLocation});
             return View(viewModel);
         }
 
         // GET: Stores/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
-                var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-                var store = await StoresRepository.Find(id);
+                var store = await StoresRepository.FindAsync(id);
                 if (store == null) return RedirectToAction(nameof(Index));
                 return View(new StoreViewModel
                 {
@@ -44,7 +41,6 @@ namespace GroceriesTool.Controllers
                     StoreName = store.StoreName,
                     StoreLocation = store.StoreLocation
                 });
-            }
         }
 
         // GET: Stores/Create
@@ -66,17 +62,13 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
-                    var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
                     var Store = new Stores();
                     Store.Openinghours = model.Openinghours;
                     Store.Closinghours = model.Closinghours;
                     Store.StoreName = model.StoreName;
                     Store.StoreLocation = model.StoreLocation;
-                    StoresRepository.Add(Store);
+                    StoresRepository.AddAsync(Store);
                     return RedirectToAction(nameof(Index));
-                }
             }
             catch
             {
@@ -91,7 +83,7 @@ namespace GroceriesTool.Controllers
             using (var dbContext = new DAL.Context.DatabaseContext())
             {
                 var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-                var store = await StoresRepository.Find(id);
+                var store = await StoresRepository.FindAsync(id);
                 if (store == null) return RedirectToAction(nameof(Index));
                 return View(new StoreViewModel
                 {
@@ -115,17 +107,13 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
-                    var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-                    var store = await StoresRepository.Find(model.Id);
+                    var store = await StoresRepository.FindAsync(model.Id);
                     store.Openinghours = model.Openinghours;
                     store.Closinghours = model.Closinghours;
                     store.StoreName = model.StoreName;
                     store.StoreLocation = model.StoreLocation;
-                    await dbContext.SaveChangesAsync();
+                    await StoresRepository.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }
             }
             catch
             {
@@ -137,10 +125,7 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            using (var dbContext = new DAL.Context.DatabaseContext())
-            {
-                var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-                var store = await StoresRepository.Find(id);
+                var store = await StoresRepository.FindAsync(id);
                 if (store == null) return RedirectToAction(nameof(Index));
                 return View(new StoreViewModel
                 {
@@ -150,7 +135,6 @@ namespace GroceriesTool.Controllers
                     StoreName = store.StoreName,
                     StoreLocation = store.StoreLocation
                 });
-            }
         }
 
         // POST: Stores/Delete/5
@@ -159,15 +143,9 @@ namespace GroceriesTool.Controllers
         {
             try
             {
-                using (var dbContext = new DAL.Context.DatabaseContext())
-                {
-                    var StoresRepository = new DAL.Repositories.StoresRepository(dbContext);
-                    var i = await StoresRepository.Find(model.Id);
-                    dbContext.Remove(i);
-                    await dbContext.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-            }
+                    StoresRepository.Remove(model.Id);
+                    await StoresRepository.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));            }
             catch
             {
                 return View(model);

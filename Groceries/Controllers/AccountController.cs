@@ -29,7 +29,7 @@ namespace GroceriesTool.Controllers
             {
                 var GroceriesRepository = new DAL.Repositories.GroceriesRepository(dbContext);
 
-                viewModel = (await GroceriesRepository.GetAll()).ToList();
+                viewModel = (await GroceriesRepository.GetAllAsync()).ToList();
                 ViewData["Message"] = "All the storage is on this page (well it needs to be).";
             }
             return View(viewModel);
@@ -43,7 +43,7 @@ namespace GroceriesTool.Controllers
             {
                 var storeRepository = new DAL.Repositories.StoresRepository(dbContext);
 
-                viewModel = (await storeRepository.GetAll()).ToList();
+                viewModel = (await storeRepository.GetAllAsync()).ToList();
                 ViewData["Message"] = "Place all the stores in this tabel";
             }
             return View(viewModel);
