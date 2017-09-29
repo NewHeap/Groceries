@@ -28,8 +28,8 @@
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Product</td>
-                    <td><input class="stockValue" type="number" value="@item.Stock" style="width:30px;" /></td>
-                    <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button> </td>
+                    <td><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" style="width:30px;" /></td>
+                    <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button></td>
                 </tr>
             }
         </table>
@@ -37,44 +37,45 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
+    <a asp-action="Index" class="btn btn-default">Back to List</a>
 </div>
 
 @section scripts {
 <script type="text/javascript">
     $(document).ready(function () {
-            $(".buttonUp").on("click", function () {
+        $(".buttonUp").on("click", function () {
 
-                $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
-                    return ++oldval;
-                });
-
-                saveChanges();
-            });
-            $(".buttonDown").on("click", function () {
-                $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
-                    return --oldval;
-                });
-
-            });
-            $('#counter').val(function (i, oldval) {
+            $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
                 return ++oldval;
             });
 
-            var saveChanges = function (body) {
-                $.ajax({
-                        body: body,
-                        type: "POST",
-                        url: '@Url.Action("Stock")',
-                        success: function (body) {
-                           alert("Data has been added successfully.(finaly)");
-                            LoadData();
-                        },
-                        error: function () {
-                            alert("Error while inserting data U FOOL.");
-                        }
-                    });
-            }
+            saveChanges();
+        });
+        $(".buttonDown").on("click", function () {
+            $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
+                return --oldval;
+            });
+
+        });
+        $('#counter').val(function (i, oldval) {
+            return ++oldval;
+        });
+
+        var saveChanges = function (body) {
+            $.ajax({
+                body: body,
+                type: "POST",
+                url: '@Url.Action("Stock")',
+                success: function (body) {
+                    alert("Data has been added successfully.(finaly)");
+                    LoadData();
+                },
+                error: function () {
+                    alert("Error while inserting data U FOOL.");
+                }
+            });
+        }
     });
 </script>
 }

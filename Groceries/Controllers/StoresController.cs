@@ -14,17 +14,24 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class StoresController : Controller
     {
-        private IRepository<DAL.Models.Stores> StoresRepository { get; set; }
+        private IRepository<Stores> StoresRepository { get; set; }
 
         public StoresController(IRepository<DAL.Models.Stores> storesRepository)
         {
-            StoresRepository = StoresRepository;
+            StoresRepository = storesRepository;
         }
 
         // GET: Stores
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var viewModel = (await StoresRepository.GetAllAsync()).Select(x => new StoreViewModel { Id = x.Id, Openinghours = x.Openinghours, Closinghours = x.Closinghours, StoreName = x.StoreName, StoreLocation = x.StoreLocation});
+            var viewModel = (await StoresRepository.GetAllAsync()).Select(x => new StoreViewModel
+            {
+                Id = x.Id,
+                Openinghours = x.Openinghours,
+                Closinghours = x.Closinghours,
+                StoreName = x.StoreName,
+                StoreLocation = x.StoreLocation
+            }).ToList();
             return View(viewModel);
         }
 
@@ -62,13 +69,15 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                    var Store = new Stores();
-                    Store.Openinghours = model.Openinghours;
-                    Store.Closinghours = model.Closinghours;
-                    Store.StoreName = model.StoreName;
-                    Store.StoreLocation = model.StoreLocation;
-                    StoresRepository.AddAsync(Store);
-                    return RedirectToAction(nameof(Index));
+                var Store = new Stores
+                {
+                    Openinghours = model.Openinghours,
+                    Closinghours = model.Closinghours,
+                    StoreName = model.StoreName,
+                    StoreLocation = model.StoreLocation
+                };
+                StoresRepository.AddAsync(Store);
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

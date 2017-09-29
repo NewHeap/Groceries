@@ -14,7 +14,7 @@ namespace GroceriesTool.Controllers
     [Authorize]
     public class GroceriesController : Controller
     {
-        private IRepository<DAL.Models.Groceries> GroceriesRepository { get; set; }
+        private IRepository<Groceries> GroceriesRepository { get; set; }
 
         public GroceriesController(IRepository<DAL.Models.Groceries> groceriesRepository)
         {
@@ -33,7 +33,7 @@ namespace GroceriesTool.Controllers
                 Code = x.Code,
                 BuyLocation = x.BuyLocation,
                 StoreName = x.StoreName
-            });
+            }).ToList();
             return View(viewModel);
         }
 
@@ -67,19 +67,21 @@ namespace GroceriesTool.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Please check fields for errer");
                 return View(model);
             }
             try
             {
-                var Grocerie = new Groceries();
-                Grocerie.Id = model.Id;
-                Grocerie.Product = model.Product;
-                Grocerie.Stock = model.Stock;
-                Grocerie.Price = model.Price;
-                Grocerie.Code = model.Code;
-                Grocerie.BuyLocation = model.BuyLocation;
-                Grocerie.StoreName = model.StoreName;
+                var Grocerie = new Groceries
+                {
+                    Id = model.Id,
+                    Product = model.Product,
+                    Stock = model.Stock,
+                    Price = model.Price,
+                    Code = model.Code,
+                    BuyLocation = model.BuyLocation,
+                    StoreName = model.StoreName
+                };
+                GroceriesRepository.Add(Grocerie);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -113,7 +115,6 @@ namespace GroceriesTool.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Please check fields for errer");
                 return View(model);
             }
             try
@@ -126,6 +127,7 @@ namespace GroceriesTool.Controllers
                     Grocerie.Code = model.Code;
                     Grocerie.BuyLocation = model.BuyLocation;
                     Grocerie.StoreName = model.StoreName;
+                    await GroceriesRepository.UpdateAsync(Grocerie);
                     return RedirectToAction(nameof(Index));
             }
             catch
@@ -174,9 +176,14 @@ namespace GroceriesTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Stock(int id)
         {
-            var viewModel = new List<DAL.Models.Groceries>();
+            //var viewModel = new List<Groceries>();
 
-                viewModel = (await GroceriesRepository.GetAllAsync()).ToList();
+            var viewModel = (await GroceriesRepository.GetAllAsync()).Select(x => new GrocerieViewModel
+            {
+                Id = x.Id,
+                Product = x.Product,
+                Stock = x.Stock,
+            }).ToList();
             return View(viewModel);
         }
 
@@ -193,10 +200,10 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                    var Grocerie = new DAL.Models.Groceries();
-                    await GroceriesRepository.SaveChangesAsync();
-                    return Ok();
-                    //return RedirectToAction(nameof(Index));
+                var Grocerie = new DAL.Models.Groceries();
+                await GroceriesRepository.SaveChangesAsync();
+                return Ok();
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
