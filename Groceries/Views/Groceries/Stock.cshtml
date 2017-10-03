@@ -24,18 +24,16 @@
             </thead> 
             @foreach (var item in Model)
             {
-            
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Product</td>
-                    <td><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" style="width:30px;" /></td>
+                    <td><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:30px;" /></td>
                     <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button></td>
                 </tr>
             }
         </table>
     </div>
 </div>
-
 <div>
     @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
     <a asp-action="Index" class="btn btn-default">Back to List</a>
@@ -46,33 +44,34 @@
     $(document).ready(function () {
         $(".buttonUp").on("click", function () {
 
-            $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
-                return ++oldval;
+            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                var newVal = ++oldVal;
+                var obj = { id: $(this).data("id"), stock: newVal };
+                saveChanges(obj);
+                return newVal;
             });
 
-            saveChanges();
         });
         $(".buttonDown").on("click", function () {
-            $(this).parent().parent().find(".stockValue").val(function (i, oldval) {
-                return --oldval;
+            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                var newVal = --oldVal;
+                var obj = { id: $(this).data("id"), stock: newVal };
+                saveChanges(obj);
+                return newVal;
             });
-
         });
-        $('#counter').val(function (i, oldval) {
-            return ++oldval;
-        });
-
-        var saveChanges = function (body) {
+        var saveChanges = function (item) {
+            if (item.stock <= -1) return;
+            $(this).parent().parent().find(".stockValue").val(function (i, oldval) { });
             $.ajax({
-                body: body,
+                item: item,
                 type: "POST",
-                url: '@Url.Action("Stock")',
-                success: function (body) {
-                    alert("Data has been added successfully.(finaly)");
-                    LoadData();
+                url: '@Url.Action("EditStock", "Groceries")',
+                data: 'id='+item.id+'&stock='+item.stock,
+                success: function (response) {
+                    console.log("saved");
                 },
                 error: function () {
-                    alert("Error while inserting data U FOOL.");
                 }
             });
         }

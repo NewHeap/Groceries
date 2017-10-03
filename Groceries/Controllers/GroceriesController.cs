@@ -200,7 +200,6 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                var Grocerie = new DAL.Models.Groceries();
                 await GroceriesRepository.SaveChangesAsync();
                 return Ok();
                 //return RedirectToAction(nameof(Index));
@@ -212,15 +211,15 @@ namespace GroceriesTool.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditStock(int id, int stock)
         {
             try
             {
-                    var grocerie = await GroceriesRepository.FindAsync(id);
-                    grocerie.Stock = stock.ToString();
-                    await GroceriesRepository.SaveChangesAsync();
-                    return Ok();
+                var grocerie = await GroceriesRepository.FindAsync(id);
+                if (grocerie == null) return RedirectToAction(nameof(Index));
+                grocerie.Stock = stock.ToString();
+                await GroceriesRepository.SaveChangesAsync();
+                return Ok();
             }
             catch
             {

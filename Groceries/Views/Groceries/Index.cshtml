@@ -8,35 +8,78 @@
 @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
 @Html.ActionLink("Get all the stock", "Stock", null, null, new { @class = "btn btn-default" })
 <a class = "btn btn-default "  href="#" onclick="window.print();return false;"><span class="glyphicon glyphicon-print"></span> Print</a> 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <td class="print">Id</td>
-            <td class="print">Product</td>
-            <td class="print">Code</td>
-            <td class="print">Price</td>
-            <td class="print">Stock</td>
-            <td class="print">BuyLocation</td>
-            <td class="print">StoreName</td>
-            <td class="print"></td>
-        </tr>
-    </thead>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td class="print">@item.Id</td>
-            <td class="print">@item.Product</td>
-            <td class="print">@item.Code</td>
-            <td class="print">@item.Price</td>
-            <td class="print">@item.Stock</td>
-            <td class="print">@item.BuyLocation</td>
-            <td class="print">@item.StoreName</td>
+<div class="table-responsive">
+    <table class="table table-striped responsive-stacked-table with-mobile-labels">
+        <thead>
+            <tr>
+                <td class="print">Id</td>
+                <td class="print">Product</td>
+                <td>-</td>
+                <td class="print">Stock</td>
+                <td>+</td>
+                <td class="print">Price</td>
+                <td class="print">Code</td>
+                <td class="print">BuyLocation</td>
+                <td class="print">StoreName</td>
+                <td class="print"></td>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="print" data-category="Id">@item.Id</td>
+                <td class="print" data-category="Product">@item.Product</td>
+                <td><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button></td>
+                <td class="print" data-category="Stock"><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:35px;" /></td>
+                <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button></td>
+                <td class="print" data-category="Price">@item.Price</td>
+                <td class="print" data-category="Code">@item.Code</td>
+                <td class="print" data-category="BuyLocation">@item.BuyLocation</td>
+                <td class="print" data-category="StoreName">@item.StoreName</td>
+                <td class="btn-group"  data-category="Actions">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(".buttonUp").on("click", function () {
 
-            <td class="btn-group">
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
-            </td>
-        </tr>
-    }
-</table>
+            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                var newVal = ++oldVal;
+                var obj = { id: $(this).data("id"), stock: newVal };
+                saveChanges(obj);
+                return newVal;
+            });
+        });
+        $(".buttonDown").on("click", function () {
+            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                var newVal = --oldVal;
+                var obj = { id: $(this).data("id"), stock: newVal };
+                saveChanges(obj);
+                return newVal;
+            });
+        });
+        var saveChanges = function (item) {
+            if (item.stock <= -1 && item.stock >= 100) return;
+            $(this).parent().parent().find(".stockValue").val(function (i, oldval) { });
+            $.ajax({
+                item: item,
+                type: "POST",
+                url: '@Url.Action("EditStock", "Groceries")',
+                data: 'id='+item.id+'&stock='+item.stock,
+                success: function (response) {
+                    console.log("saved");
+                },
+                error: function () {
+                }
+            });
+        }
+    });
+    </script>
+}
