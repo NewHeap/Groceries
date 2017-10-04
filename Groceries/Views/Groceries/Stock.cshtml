@@ -14,7 +14,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <table class="table table-striped">
+        <table class="table table-striped tablesize">
             <thead>
                 <tr>
                     <td>Id</td>
@@ -28,15 +28,16 @@
                     <td>@item.Id</td>
                     <td>@item.Product</td>
                     <td><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:30px;" /></td>
-                    <td><button class="buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button><button class="buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button></td>
+                    <td><button class="btn btn-default buttonUp plusminsize"><span class="glyphicon glyphicon-menu-up"></span></button>
+                    <button class="btn btn-default buttonDown plusminsize"><span class="glyphicon glyphicon-menu-down"></span></button></td>
                 </tr>
             }
         </table>
     </div>
 </div>
 <div>
-    @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
-    <a asp-action="Index" class="btn btn-default">Back to List</a>
+    @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default actionbtn" })
+    <a asp-action="Index" class="btn btn-default actionbtn">Back to List</a>
 </div>
 
 @section scripts {

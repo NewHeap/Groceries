@@ -46,10 +46,21 @@ input {
     height: 44px;
 
 }
-.tablesize tr td, .actionbtn {
+.tablesize{
     font-size: medium;
 }
-.stacktable.large-only { display: table; }
+.rij:nth-child(even) {
+    background: #ffffff
+}
+
+.rij:nth-child(odd) {
+    background: #f9f9f9
+}
+.rij {
+    border-top: 1px solid #ddd;
+}
+
+.stacktable.large-only { display: contents; }
 .stacktable.small-only { display: none; }
 
 @media (max-width: 992px) {
