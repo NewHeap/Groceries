@@ -52,7 +52,7 @@ input {
 .stacktable.large-only { display: table; }
 .stacktable.small-only { display: none; }
 
-@media (max-width: 800px) {
+@media (max-width: 992px) {
   .stacktable.large-only { display: none; }
   .stacktable.small-only { display: table; }
 }

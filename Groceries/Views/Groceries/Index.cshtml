@@ -3,26 +3,25 @@
 @{
     ViewData["Title"] = "Groceries";
 }
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 @Html.ActionLink("Create new Product", "Create", null, null, new { @class = "btn btn-default" })
 @Html.ActionLink("Get all the stock", "Stock", null, null, new { @class = "btn btn-default" })
 <a class = "btn btn-default "  href="#" onclick="window.print();return false;"><span class="glyphicon glyphicon-print"></span> Print</a> 
-<div class="table-responsive">
-    <table class="table table-striped tablesize lage-only">
+<div class="table-responsive "> 
+    <table class="table table-striped tablesize stacktable large-only">
         <thead>
             <tr>
-                <td class="print">Id</td>
-                <td class="print">Product</td>
-                <td>-</td>
-                <td class="print">Stock</td>
-                <td>+</td>
-                <td class="print">Price</td>
-                <td class="print">Code</td>
-                <td class="print">BuyLocation</td>
-                <td class="print">StoreName</td>
-                <td class="print"></td>
+                <th class="print">Id</th>
+                <th class="print">Product</th>
+                <th>-</th>
+                <th class="print">Stock</th>
+                <th>+</th>
+                <th class="print">Price</th>
+                <th class="print">Code</th>
+                <th class="print">BuyLocation</th>
+                <th class="print">StoreName</th>
+                <th class="print"></th>
             </tr>
         </thead>
         @foreach (var item in Model)
@@ -30,55 +29,69 @@
             <tr>
                 <td class="print">@item.Id</td>
                 <td class="print">@item.Product</td>
-                <td><button class="btn btn-default buttonDown plusminsize"><span class="glyphicon glyphicon-menu-down"></span></button></td>
+                <td><button class="btn btn-default buttonDown"><span class="glyphicon glyphicon-menu-down"></span></button></td>
                 <td class="print" ><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:35px;" /></td>
-                <td><button class="btn btn-default buttonUp plusminsize"><span class="glyphicon glyphicon-menu-up"></span></button></td>
+                <td><button class="btn btn-default buttonUp"><span class="glyphicon glyphicon-menu-up"></span></button></td>
                 <td class="print">@item.Price</td>
                 <td class="print">@item.Code</td>
                 <td class="print">@item.BuyLocation</td>
                 <td class="print">@item.StoreName</td>
                 <td class="btn-group"  data-category="Actions">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default" })
                 </td>
             </tr>
         }
     </table>
 </div>
-<table class="table table-striped tablesize small-only" >
-    <thead>
-        <tr>
-            <td class="print">Id</td>
-            <td class="print">Product</td>
-            <td>-</td>
-            <td class="print">Stock</td>
-            <td>+</td>
-            <td class="print">Price</td>
-            <td class="print">Code</td>
-            <td class="print">BuyLocation</td>
-            <td class="print">StoreName</td>
-            <td class="print"></td>
-        </tr>
-    </thead>
+<table class="table table-striped tablesize stacktable small-only" >
     @foreach (var item in Model)
     {
         <tr>
-            <td class="print">@item.Id</td>
-            <td class="print">@item.Product</td>
-            <td><button class="btn btn-default buttonDown plusminsize"><span class="glyphicon glyphicon-menu-down"></span></button></td>
-            <td class="print"><input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:35px;" /></td>
-            <td><button class="btn btn-default buttonUp plusminsize"><span class="glyphicon glyphicon-menu-up"></span></button></td>
-            <td class="print">@item.Price</td>
-            <td class="print">@item.Code</td>
-            <td class="print">@item.BuyLocation</td>
-            <td class="print">@item.StoreName</td>
+            <th>Id</th>
+            <td>@item.Id</td>
+        </tr>
+        <tr>
+            <th>Product</th>
+            <td>@item.Product</td>
+        </tr>
+        <tr>
+            <th>Stock</th>
+            <td>
+                <button class="btn btn-default buttonDown plusminsize"><span class="glyphicon glyphicon-menu-down"></span></button>
+                <input readonly="readonly" class="stockValue" type="number" value="@item.Stock" data-id="@item.Id" style="width:35px;" />
+                <button class="btn btn-default buttonUp plusminsize"><span class="glyphicon glyphicon-menu-up"></span></button>
+            </td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td>@item.Price</td>
+        </tr>
+        <tr>
+            <th>Code</th>
+            <td>@item.Code</td>
+        </tr>
+        <tr>
+            <th>BuyLocation</th>
+            <td>@item.BuyLocation</td>
+        </tr>
+        <tr>
+            <th>StoreName</th>
+            <td>@item.StoreName</td>
+        </tr>
+        <tr>
             <td class="btn-group" data-category="Actions">
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
                 @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
             </td>
-        </tr>
+            <td>
+                <br />
+                <br />
+                <br />
+            </td>
+        </tr>   
     }
 </table>
 
