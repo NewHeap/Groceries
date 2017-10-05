@@ -20,9 +20,7 @@
     </thead>
     @foreach (var item in Model)
     { 
-       
         <tr>
-            @*<td>@Html.DisplayFor(modelItem => item.Id)</td>*@
             <td>@item.Id</td>
             <td>@item.Openinghours</td>
             <td>@item.Closinghours</td>
@@ -34,7 +32,6 @@
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
             </td>
         </tr>
-
     }
 </table>
 @foreach (var item in Model)
@@ -61,11 +58,9 @@
             <div class="col-sm-3">@item.StoreLocation</div>
         </div>
         <div class="row rij">
-            <div class="col-sm-4 btn-group actionbtn">
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
-                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })
-            </div>
+            <div class="col-xs-4">@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })</div>
+            <div class="col-xs-4">@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })</div>
+            <div class="col-xs-4">@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-default actionbtn" })</div>
         </div>
         <br />
     </div>
