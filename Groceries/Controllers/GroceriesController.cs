@@ -221,9 +221,9 @@ namespace GroceriesTool.Controllers
                 await GroceriesRepository.SaveChangesAsync();
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(ex);
             }
         }
     }

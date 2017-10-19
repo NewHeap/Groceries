@@ -86,43 +86,50 @@
             <br />
         </div>
     }   
-
 @section scripts {
     <script type="text/javascript">
-    $(document).ready(function () {
-        $(".buttonUp").on("click", function () {
+        $(document).ready(function () {
+            $(".buttonUp").on("click", function () {
 
-            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
-                var newVal = ++oldVal;
-                var obj = { id: $(this).data("id"), stock: newVal };
-                saveChanges(obj);
-                return newVal;
+                $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                    var newVal = ++oldVal;
+                    var obj = { id: $(this).data("id"), stock: newVal };
+                    saveChanges(obj);
+                    return newVal;
+                });
             });
+            $(".buttonDown").on("click", function () {
+                $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
+                    var newVal = --oldVal;
+                    var obj = { id: $(this).data("id"), stock: newVal };
+                    saveChanges(obj);
+                    return newVal;
+                });
+            });
+            var saveChanges = function (item) {
+                if (item.stock <= -1 || item.stock >= 100) return;
+                $(this).parent().parent().find(".stockValue").val(function (i, oldval) { });
+                $.ajax({
+                    item: item,
+                    type: "POST",
+                    url: '@Url.Action("EditStock", "Groceries")',
+                    data: 'id='+item.id+'&stock='+item.stock,
+                    success: function (data, statusText, xhr) {
+                        console.log("Success1:", xhr.status);
+                        if (xhr.status == 200)
+                        {
+                            console.log("Success2:", xhr.status);
+                        }
+                        else
+                        {
+                            alert("Succes:", xhr.status, "but a error has acured");
+                        }
+                    },
+                    error: function (data, statusText, xhr) {
+                        alert("Error: "+ xhr.status + ". Cant save");
+                    }
+                });
+            }
         });
-        $(".buttonDown").on("click", function () {
-            $(this).parent().parent().find(".stockValue").val(function (i, oldVal) {
-                var newVal = --oldVal;
-                var obj = { id: $(this).data("id"), stock: newVal };
-                saveChanges(obj);
-                return newVal;
-            });
-        });
-        var saveChanges = function (item) {
-            if (item.stock <= -1 || item.stock >= 100) return;
-            $(this).parent().parent().find(".stockValue").val(function (i, oldval) { });
-            $.ajax({
-                item: item,
-                type: "POST",
-                url: '@Url.Action("EditStock", "Groceries")',
-                data: 'id='+item.id+'&stock='+item.stock,
-                success: function (response) {
-                    console.log("saved");
-                },
-                error: function () {
-                    alert("A error has occurred try again later or contact the admin")
-                }
-            });
-        }
-    });
     </script>
 }
