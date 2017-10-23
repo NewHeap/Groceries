@@ -2,27 +2,34 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/GroceriesTool",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "http://localhost:50852/",
-      "sslPort": 44351
+      "applicationUrl": "http://192.168.8.100:44351/",
+      "sslPort": 44338
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": false,
-      "launchUrl": "https://localhost:44351/",
+      "launchBrowser": true,
+      "launchUrl": "https://192.168.8.100:44338/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Groceries": {
+    "GroceriesTool": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:50853/"
+      "applicationUrl": "http://192.168.8.100:44351/"
+    },
+    "newProfile1": {
+      "commandName": "Executable"
     }
   }
 }

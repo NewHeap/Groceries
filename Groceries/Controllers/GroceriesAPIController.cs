@@ -8,6 +8,8 @@ using GroceriesTool.DAL.Models;
 using GroceriesTool.DAL.Context;
 using GroceriesTool.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
