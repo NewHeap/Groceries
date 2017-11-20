@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using GroceriesTool.DAL.Repositories;
-using GroceriesTool.DAL.Models;
 using GroceriesTool.DAL.Context;
 using GroceriesTool.Models;
 using Microsoft.EntityFrameworkCore;
+using GroceriesTool.DAL.Models;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,10 +15,12 @@ namespace GroceriesTool.Controllers
     public class StoresAPIController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public StoresAPIController(DatabaseContext context)
+        public StoresAPIController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -59,7 +59,6 @@ namespace GroceriesTool.Controllers
             {
                 return BadRequest();
             }
-
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(long id, [FromBody] Stores item)
@@ -70,13 +69,8 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                var store = _context.Stores.FirstOrDefault(t => t.Id == id);
+                var store = _mapper.Map<Stores>(item);
 
-                store.StoreName = item.StoreName;
-                store.StoreLocation = item.StoreLocation;
-                store.Openinghours = item.Openinghours;
-                store.Closinghours = item.Closinghours;
-    
                 _context.Stores.Update(store);
                 await _context.SaveChangesAsync();
                 return Ok();

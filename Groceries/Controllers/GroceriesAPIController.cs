@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using GroceriesTool.DAL.Repositories;
-using GroceriesTool.DAL.Models;
 using GroceriesTool.DAL.Context;
 using GroceriesTool.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Cors;
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using GroceriesTool.DAL.Models;
+using AutoMapper;
 
 namespace GroceriesTool.Controllers
 {
@@ -19,10 +13,12 @@ namespace GroceriesTool.Controllers
     public class GroceriesAPIController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public GroceriesAPIController(DatabaseContext context)
+        public GroceriesAPIController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task <IActionResult> Get()
@@ -44,7 +40,7 @@ namespace GroceriesTool.Controllers
             }
         }
         [HttpPost]
-        public async Task <IActionResult> Post([FromBody] Groceries item)
+        public async Task <IActionResult> Post([FromBody] GrocerieViewModel item)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +48,8 @@ namespace GroceriesTool.Controllers
             }
             try
             {
-                _context.Groceries.Add(item);
+                var grocerie = _mapper.Map<Groceries>(item);
+                _context.Groceries.Add(grocerie);
                 await _context.SaveChangesAsync();
 
                 return Ok();
@@ -64,7 +61,7 @@ namespace GroceriesTool.Controllers
 
         }
         [HttpPut("{id}")]
-        public async Task <IActionResult> Put(long id, [FromBody] Groceries item)
+        public async Task <IActionResult> Put(long id, [FromBody] GrocerieViewModel item)
         {
             if (!ModelState.IsValid)
             {
@@ -73,13 +70,13 @@ namespace GroceriesTool.Controllers
             try
             {
                 var grocerie = _context.Groceries.FirstOrDefault(t => t.Id == id);
-
                 grocerie.Product = item.Product;
                 grocerie.Stock = item.Stock;
                 grocerie.Price = item.Price;
                 grocerie.Code = item.Code;
                 grocerie.BuyLocation = item.BuyLocation;
                 grocerie.StoreName = item.StoreName;
+                //var grocerie = _mapper.Map<Groceries>(item);
 
                 _context.Groceries.Update(grocerie);
                 await _context.SaveChangesAsync();
@@ -103,7 +100,8 @@ namespace GroceriesTool.Controllers
             }
             catch
             {
-                return NotFound();
+                var error = $"Didn't find Id {id}";
+                return NotFound(error);
             }
         }
     }

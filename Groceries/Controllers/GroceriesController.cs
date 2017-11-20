@@ -16,7 +16,7 @@ namespace GroceriesTool.Controllers
     {
         private IRepository<Groceries> GroceriesRepository { get; set; }
 
-        public GroceriesController(IRepository<DAL.Models.Groceries> groceriesRepository)
+        public GroceriesController(IRepository<Groceries> groceriesRepository)
         {
             GroceriesRepository = groceriesRepository;
         }
@@ -24,15 +24,15 @@ namespace GroceriesTool.Controllers
         // GET: Groceries
         public async Task<IActionResult> Index()
         {
-            var viewModel = (await GroceriesRepository.GetAllAsync()).Select(x => new GrocerieViewModel
+            var viewModel = (await GroceriesRepository.GetAllAsync()).Select(item => new GrocerieViewModel
             {
-                Id = x.Id,
-                Product = x.Product,
-                Stock = x.Stock,
-                Price = x.Price,
-                Code = x.Code,
-                BuyLocation = x.BuyLocation,
-                StoreName = x.StoreName
+                Id = item.Id,
+                Product = item.Product,
+                Stock = item.Stock,
+                Price = item.Price,
+                Code = item.Code,
+                BuyLocation = item.BuyLocation,
+                StoreName = item.StoreName
             }).ToList();
             return View(viewModel);
         }

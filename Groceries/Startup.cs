@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using GroceriesTool.DAL.Context;
 using GroceriesTool.DAL.Repositories;
 using GroceriesTool.DAL.Models;
+using GroceriesTool.Models;
 
 namespace GroceriesTool
 {
@@ -39,8 +36,16 @@ namespace GroceriesTool
             services.AddDbContext<DatabaseContext>();
 
             services.AddMvc();
-            services.AddSingleton<IRepository<DAL.Models.Groceries>>(new GroceriesRepository(new DatabaseContext()));
+            services.AddSingleton<IRepository<Groceries>>(new GroceriesRepository(new DatabaseContext()));
             services.AddSingleton<IRepository<Stores>>(new StoresRepository(new DatabaseContext()));
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<GrocerieViewModel, Groceries>();
+            });
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+            //services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
